@@ -4,5 +4,11 @@ project(paincave21)
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_subdirectory(lib/glad/)
+add_subdirectory(lib/glfw/)
+
 # add the executable
 add_executable(paincave21 src/main.cpp)
+
+target_link_libraries(paincave21 PRIVATE glad)
+target_link_libraries(paincave21 PRIVATE glfw)
