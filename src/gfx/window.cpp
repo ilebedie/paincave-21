@@ -18,7 +18,7 @@ void processInput(GLFWwindow *window)
     }
 }
 
-Window::Window(std::function<void()> callback) : m_callback(callback) 
+Window::Window()
 {
     glfwInit();
 
@@ -44,7 +44,7 @@ Window::Window(std::function<void()> callback) : m_callback(callback)
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 }
 
-void Window::main_loop()
+void Window::main_loop(std::function<void()> world_update)
 {
     while (!glfwWindowShouldClose(window)) 
     {
@@ -52,7 +52,7 @@ void Window::main_loop()
         processInput(window);
 
         // World events here
-        m_callback();
+        world_update();
 
         // swap
         glfwSwapBuffers(window);

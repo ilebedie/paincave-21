@@ -1,5 +1,6 @@
 #include <iostream>
 #include "gfx/window.h"
+#include "gfx/renderer.h"
 
 using namespace std;
 
@@ -11,16 +12,20 @@ void testCpp17() {
     cout<<"Here\n is b: "<<b;
 }
 
-void render()
+struct World
 {
-    // render
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-}
+    Renderer renderer;
+    void update()
+    {
+        renderer.update();
+    }
+};
 
 int main() {
     testCpp17();
-    Window window(render);
-    window.main_loop();
+    Window window;
+    World world;
+    auto world_update_callback = std::bind(&World::update, world);
+    window.main_loop(world_update_callback);
     return 0;
 }

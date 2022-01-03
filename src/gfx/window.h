@@ -3,19 +3,23 @@
 
 #include <functional>
 #include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <cstdlib>
 
+#include "gfx.h"
+
+
+/*
+    Window(OpenGL init, swap buffer, Input(mouse, keyboard)) live here 
+    Window runs main loop
+*/
 class Window
 {
 public:
-    Window(std::function<void()> callback);
+    Window();
     ~Window();
-    void main_loop();
+    void main_loop(std::function<void()> world_update);
 
 private:
-    std::function<void()> m_callback;
     GLFWwindow* window;
 };
 
