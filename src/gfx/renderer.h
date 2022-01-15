@@ -2,10 +2,21 @@
 #define RENDERER_H
 
 #include "gfx.h"
+#include <string>
+
+struct ShadersSourceCode
+{
+    std::string defaultVertexShader;
+    std::string defaultFragmentShader;
+};
+
 
 struct Renderer
 {
+    GLuint shader_program;
+    ShadersSourceCode shaders_source_code;
     Renderer();
     void update();
 };
+
 #endif
