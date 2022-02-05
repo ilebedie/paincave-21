@@ -1,11 +1,11 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <functional>
 #include <iostream>
 #include <cstdlib>
 
 #include "gfx.h"
+#include "../world/world.h"
 
 
 /*
@@ -17,7 +17,7 @@ class Window
 public:
     Window();
     ~Window();
-    void main_loop(std::function<void()> world_update);
+    void main_loop(World& w);
 
 private:
     GLFWwindow* window;
