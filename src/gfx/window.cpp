@@ -1,7 +1,10 @@
 #include "window.h"
+#include <chrono>
+using namespace std::chrono_literals;
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+const auto now = std::chrono::system_clock::now;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -44,20 +47,22 @@ Window::Window()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 }
 
-void Window::main_loop(std::function<void()> world_update)
+void Window::main_loop(World& world)
 {
+    auto sim_time = now();
     while (!glfwWindowShouldClose(window)) 
     {
-        // input
+        auto current_real_world_time = now();
+
         processInput(window);
 
-        // World events here
-        world_update();
+        if(sim_time < current_real_world_time)
+        {
+            sim_time += 16ms;
+            world.update();
+            glfwSwapBuffers(window);
+        }
 
-        // swap
-        glfwSwapBuffers(window);
-
-        // poll
         glfwPollEvents();
     }
 }
