@@ -16,7 +16,7 @@ std::string read_shader_file(const std::string file_path)
     return contents;
 }
 
-Renderer::Renderer()
+void Renderer::init_shaders()
 {
     const auto vs_path = "res/shaders/default.vs";
     this->shaders_source_code.defaultVertexShader = read_shader_file(vs_path);
@@ -35,12 +35,15 @@ Renderer::Renderer()
 	shader_program = glCreateProgram();
 	glAttachShader(shader_program, vertexShader);
 	glAttachShader(shader_program, fragmentShader);
-	// Wrap-up/Link all the shaders together into the Shader Program
 	glLinkProgram(shader_program);
 
-	// Delete the now useless Vertex and Fragment Shader objects
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+}
+
+Renderer::Renderer()
+{
+    this->init_shaders();
 
     GLfloat vertices[] = {
         -0.5f, -0.5f * float(std::sqrt(3)) / 3, 0.0f,
@@ -48,10 +51,34 @@ Renderer::Renderer()
         0.0f, 0.5f * float(std::sqrt(3)) * 2 / 3, 0.0f,
     };
 
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
+
+Renderer::~Renderer()
+{
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shader_program);
 }
 
 void Renderer::update()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
     glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(shader_program);
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 }

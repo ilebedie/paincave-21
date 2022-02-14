@@ -16,7 +16,11 @@ struct Renderer
     GLuint shader_program;
     ShadersSourceCode shaders_source_code;
     Renderer();
+    ~Renderer();
     void update();
+    void init_shaders();
+
+    GLuint VAO, VBO;
 };
 
 #endif
